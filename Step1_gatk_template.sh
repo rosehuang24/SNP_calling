@@ -14,6 +14,7 @@ parentDIR=/pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/
 # or rerun some of the experiments by running them
 # seperately by population, hence the pop parameter. 
 
+# This is for naming and dirctory purposes. Change upon use.
 #pop=AAAA
 #popdecap=BBBB
 
@@ -29,14 +30,21 @@ picard=/usr/local/picard2.19.0/picard.jar
 fastqc=/backup/home/zhenying_Group/bin/FastQC/fastqc
 parallel=/usr/local/parallel20190422/bin/parallel
 
+# This is the adaptor file required for trimmomatic. Pair end, truseq 3. Change upon use.
 TruSeq3PE=/backup/home/zhenying_Group/huangruoshi/biosoft/Trimmomatic-0.39/adapters/TruSeq3-PE.fa
 
 
 REFDIR=/pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/chicken_ref/
 
 ref_genome=$REFDIR/Gallus_gallus.GRCg6a.dna.toplevel.fa
+
+# You need to create the bwa refenrece files. It can be easily obteined online. I created it months ago so no pipeline for this. 
 ref_bwa=$REFDIR/RefSeq
+
+# Downloaded from public database. If your species don't have one, do the BQSR bootstrapping. Not shown in this pipeline.
 dbsnp=$REFDIR/newdbSNP.vcf.gz
+
+# Chrmosome of interest. One per line
 autosome=/pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/auto_chrm.txt
 
 
@@ -70,6 +78,7 @@ ILLUMINACLIP:$TruSeq3PE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:5
 $fastqc -t 4 $SRAfileDir/${id}_1_paired.fq.gz $SRAfileDir/${id}_2_paired.fq.gz
 
 # Step2: map the reads to reference
+# Change read group upon use.
 
 $bwa mem -t 4 -M \
 -R "@RG\tID:${id}\tLB:${pop}\tPL:illumina\tPU:ncbi\tSM:${indv}" \
@@ -86,6 +95,7 @@ I=$POPDIR/${indv}.sam \
 O=$POPDIR/${indv}_sorted.bam \
 SO=coordinate
 
+# Soecific the name and directory of metrics file. It will be created by the algorism.
 java -jar $picard MarkDuplicates \
 I=$POPDIR/${indv}_sorted.bam \
 O=$POPDIR/${indv}_dedup.bam \
@@ -111,11 +121,12 @@ RAWOUTPUTDIR=$POPDIR/${indv}_raw_chrms_vcfs
 
 $parallel java -jar -Xmx8G \
 $gatk HaplotypeCaller \
--L {} -R $ref_genome \
+-L {} -R $ref_genome \ #-L: to specify output chromosome
 -I $POPDIR/${indv}_recal.bam \
--ERC BP_RESOLUTION \
+-ERC BP_RESOLUTION \ #to output every position, no matter if it is ref or alt. This is mainly for callable site counting in future. If just for SNP calling it doesn't matter which para.
 -output-mode EMIT_ALL_SITES \
 --dbsnp $dbsnp \
 -O $RAWOUTPUTDIR/${indv}_{}.raw.g.vcf.gz \
 :::: $autosome
 
+# at the end you should have raw input vcf per individuals (or even per chromosome.)
