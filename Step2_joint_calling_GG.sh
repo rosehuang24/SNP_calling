@@ -1,3 +1,5 @@
+# you should have raw g.vcf output per indivudal (or even per chromosomes) as input.
+
 source ~/.bash_profile
 hash -r
 
@@ -17,8 +19,9 @@ dirname=`head -n $SGE_TASK_ID $chrmfile | tail -n1 | awk '{print $3}'`
 
 # preparation. Change the directory upon use. 
 # Do create a folder for tmp directory but NOT for my_database
-# OUTDIR=/pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/70/snp/outputvcfs/
-# mkdir -p /pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/70/snp/GGprocess/tmp_dir_${dirname}
+
+OUTDIR=/pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/70/snp/outputvcfs/
+mkdir -p /pdiskdata/zhenyinggroupADS/huangruoshi/wgsdata/70/snp/GGprocess/tmp_dir_${dirname}
 
 java -jar -Xmx8G $gatk GenomicsDBImport -R $ref_genome \
 -V /path/to/your/raw/vcfoutput/per/individual/per/chrm/SAMPLE1_${chrm}.raw.g.vcf.gz \
