@@ -35,7 +35,7 @@ def AC(a,b):
         number_sum.append(pop_p)
 
 for lines in inh:
-    if not lines.startswith("#C"):
+    if not lines.startswith("#"):
         number_sum=[]
         line=lines.strip().split()
         sk=[]
