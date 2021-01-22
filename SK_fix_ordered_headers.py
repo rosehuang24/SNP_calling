@@ -29,11 +29,12 @@ def AC(a,b):
         gt=i.split(":")[0]
         if gt!="./.":
             pop.append(int(d[gt]))
-    pop_p=round(sum(pop)/(2*(len(pop)))*1000)
-    number_sum.append(pop_p)
+    if len(pop)!=0:
+        pop_p=round(sum(pop)/(2*(len(pop)))*1000)
+        number_sum.append(pop_p)
 
 for lines in inh:
-    if not lines.startswith("#C"):
+    if not lines.startswith("#"):
         number_sum=[]
         line=lines.strip().split()
         sk=[]
@@ -41,19 +42,22 @@ for lines in inh:
             gt=i.split(":")[0]
             if gt!="./.":
                 sk.append(int(d[gt]))
-        sk_p=round(sum(sk)/(2*len(sk))*1000)
-        if sk_p>699:
-            AC(32,40)
-            AC(40,46)
-            AC(46,56)
-            AC(56,66)
-            AC(66,74)
-            AC(74,84)
-            AC(84,92)
-            AC(92,105)
-        number_sum.sort()
-        if number_sum[-1] < 301:
-            outh.write(lines)
+        if len(sk)!=0:
+            sk_p=round(sum(sk)/(2*len(sk))*1000)
+            if sk_p>699:
+                AC(32,40)
+                AC(40,46)
+                AC(46,56)
+                AC(56,66)
+                AC(66,74)
+                AC(74,84)
+                AC(84,92)
+                AC(92,105)
+            if len(number_sum)>0:
+                number_sum.sort()
+                if number_sum[-1] < 301:
+                    outh.write(lines)
+
             
 inh.close()
 outh.close()
