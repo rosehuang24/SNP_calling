@@ -27,9 +27,8 @@ def AC(a,b):
     pop=[]
     for i in line[a:b]:
         gt=i.split(":")[0]
-        if gt!="./.":
-            if gt!=".|.":
-                pop.append(int(d[gt]))
+        if gt[0]!=".":
+            pop.append(int(d[gt]))
     if len(pop)!=0:
         pop_p=round(sum(pop)/(2*(len(pop)))*1000)
         number_sum.append(pop_p)
@@ -41,9 +40,8 @@ for lines in inh:
         sk=[]
         for i in line[9:32]:
             gt=i.split(":")[0]
-            if gt!="./.":
-                if gt!=".|.":
-                    sk.append(int(d[gt]))
+            if gt[0]!=".":
+                sk.append(int(d[gt]))
         if len(sk)!=0:
             sk_p=round(sum(sk)/(2*len(sk))*1000)
             if sk_p>699:
