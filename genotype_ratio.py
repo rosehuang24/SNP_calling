@@ -1,4 +1,6 @@
 #remember to replace all pipe characters to slashes.
+#Update: I have corperate that into code. No need to convert seperately.
+
 #the input has to be header arranged
 #SK: line[9:32]
 #YNLC: line[32:40]
@@ -37,10 +39,12 @@ def AC(a,b):
 
 
 for lines in inh:
-    line=lines.strip().split()
-    ratio=[]
-    AC(9,32)
-    AC(32,105)
-    outh.write(line[0]+"\t"+line[1]+"\t"+'\t'.join(ratio)+"\n")
+    if not lines.startswith("#"):
+        line=lines.strip().replace("|", "/").split()
+        ratio=[]
+        AC(9,32)
+        AC(32,105)
+        outh.write(line[0]+"\t"+line[1]+"\t"+'\t'.join(ratio)+"\n")
+        
 inh.close()
 outh.close()
